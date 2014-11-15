@@ -11,10 +11,10 @@ let main argv =
     let host = "localhost"
     let port = 9000
 
-    System.Threading.ThreadPool.SetMaxThreads (10240, 10240) |> ignore
-
-    let m = System.Threading.ThreadPool.GetMaxThreads ()
-    printfn "GetMaxThreads: %A" m
+//    System.Threading.ThreadPool.SetMaxThreads (10240, 10240) |> ignore
+//
+//    let m = System.Threading.ThreadPool.GetMaxThreads ()
+//    printfn "GetMaxThreads: %A" m
 
     let byteIList (data : byte array) =
         let segment = new System.ArraySegment<byte>(data)
@@ -29,7 +29,7 @@ let main argv =
             do! Async.FromBeginEnd (host, port, (fun (host, port, callback, state) -> 
                 socket.BeginConnect (host, port, callback, state)), socket.EndConnect)
 
-            printfn "Client %A Connected to %A %A..." idx host port
+//            printfn "Client %A Connected to %A %A..." idx host port
 
             let data = byteIList ("Hello world!!!"B)
             let! sentLength = Async.FromBeginEnd (data, SocketFlags.None, (fun (data, flags, callback, state) ->
@@ -39,8 +39,9 @@ let main argv =
             let! dataLength = Async.FromBeginEnd(byteIList data, SocketFlags.None, (fun (data, flags, callback, state) ->
                 socket.BeginReceive(data, flags, callback, state)), socket.EndReceive)
 
-            printfn "RE: %A" (Text.Encoding.ASCII.GetString (data))
-            do! Async.Sleep (50000)
+//            printfn "RE: %A" (Text.Encoding.ASCII.GetString (data))
+//            do! Async.Sleep 50000
+            printfn "."
 
             socket.Close ()
 

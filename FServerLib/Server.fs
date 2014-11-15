@@ -43,7 +43,7 @@ let start : Async<unit> =
     //            printfn "RE: %A" (Text.Encoding.ASCII.GetString (response))
     //            do! stream.AsyncWrite (response)
 
-                printfn "Waiting on client"
+//                printfn "Waiting on client"
 
                 try
 
@@ -51,19 +51,21 @@ let start : Async<unit> =
                     let! dataLength = Async.FromBeginEnd(byteIList data, SocketFlags.None, (fun (data, flags, callback, state) ->
                         socket.BeginReceive(data, flags, callback, state)), socket.EndReceive)
 
-                    printfn "RE: %A" (Text.Encoding.ASCII.GetString (data))
+//                    printfn "RE: %A" (Text.Encoding.ASCII.GetString (data))
 
                     let data = byteIList ("OK"B)
                     let! sentLength = Async.FromBeginEnd (data, SocketFlags.None, (fun (data, flags, callback, state) ->
                         socket.BeginSend (data, flags, callback, state)), socket.EndSend)
 
-                    return! client ()
+                    socket.Close ()
+
+//                    return! client ()
 
                 with e ->
-//                    printfn "An error occurred: %s" e.Message
+                    printfn "An error occurred: %s" e.Message
 //                    stream.Close ()
                     //socket.Shutdown (SocketShutdown.Both)
-                    socket.Close ()
+//                    socket.Close ()
 
                 
             }
