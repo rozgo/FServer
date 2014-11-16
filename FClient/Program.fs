@@ -18,7 +18,7 @@ let main argv =
     let client idx = async {
 
         try
-            let socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+            use socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
 
             socket.SetSocketOption (SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true)
 
@@ -45,6 +45,8 @@ let main argv =
 
             do! Async.FromBeginEnd (true, (fun (reuseSocket, callback, state) ->
                 socket.BeginDisconnect (reuseSocket, callback, state)), socket.EndDisconnect)
+
+            do! Async.Sleep 5000
 
 //            socket.Disconnect (true)
 //            socket.Close (0)

@@ -29,7 +29,7 @@ let start : Async<unit> =
 
         try
 
-            let! socket = Async.FromBeginEnd (listener.BeginAccept, listener.EndAccept)
+            use! socket = Async.FromBeginEnd (listener.BeginAccept, listener.EndAccept)
 
 //            let stream = new NetworkStream (socket, false)
 
@@ -64,6 +64,8 @@ let start : Async<unit> =
 
                     do! Async.FromBeginEnd (true, (fun (reuseSocket, callback, state) ->
                         socket.BeginDisconnect (reuseSocket, callback, state)), socket.EndDisconnect)
+
+                    do! Async.Sleep 5000
 
 //                    return! client ()
 
