@@ -22,7 +22,7 @@ let main argv =
             do! Async.FromBeginEnd (host, port, (fun (host, port, callback, state) ->
                 socket.BeginConnect (host, port, callback, state)), socket.EndConnect)
 
-            printfn "port: %A" socket.LocalEndPoint
+//            printfn "port: %A" socket.LocalEndPoint
 
 //            printfn "Client %A Connected to %A %A..." idx host port
 
@@ -36,7 +36,7 @@ let main argv =
 
 //            printfn "RE: %A" (Text.Encoding.ASCII.GetString (data))
 //            do! Async.Sleep 50000
-            printfn "."
+//            printfn "."
 
             socket.Close ()
 
