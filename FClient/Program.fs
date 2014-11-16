@@ -20,7 +20,7 @@ let main argv =
         try
             let socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
 
-            socket.SetSocketOption (SocketOptionLevel.Tcp, SocketOptionName.ReuseAddress, true)
+            socket.SetSocketOption (SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true)
 
             do! Async.FromBeginEnd (host, port, (fun (host, port, callback, state) ->
                 socket.BeginConnect (host, port, callback, state)), socket.EndConnect)
@@ -41,7 +41,8 @@ let main argv =
 //            do! Async.Sleep 50000
 //            printfn "."
 
-            socket.Close ()
+            socket.Disconnect (true)
+//            socket.Close ()
 
         with e ->
             Console.ForegroundColor <- ConsoleColor.Red

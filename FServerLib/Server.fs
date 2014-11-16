@@ -58,7 +58,8 @@ let start : Async<unit> =
 //                    socket.Close ()
 
                     do! Async.Sleep 3000
-                    socket.Close ()
+//                    socket.Close ()
+                    socket.Disconnect (true)
 
 //                    return! client ()
 
