@@ -57,13 +57,21 @@ let start : Async<unit> =
 
 //                    socket.Close ()
 
-                    do! Async.Sleep 3000
+                    do! Async.Sleep 5000
 //                    socket.Close ()
-                    socket.Disconnect (true)
+
+                    do! Async.FromBeginEnd (true, (fun (reuseSocket, callback, state) ->
+                        socket.BeginDisconnect (reuseSocket, callback, state)), socket.EndDisconnect)
 
 //                    return! client ()
 
-                with e ->
+                with
+                | :? SocketException as e ->
+                    Console.ForegroundColor <- ConsoleColor.Red
+                    printfn "%A: %A" e e.ErrorCode
+                    Console.ResetColor ()            
+
+                | e ->
                     Console.ForegroundColor <- ConsoleColor.Red
                     printfn "%s" e.Message
                     Console.ResetColor ()
@@ -77,7 +85,13 @@ let start : Async<unit> =
 //            do! client ()
             Async.Start (client ())
 
-        with e ->
+        with
+        | :? SocketException as e ->
+            Console.ForegroundColor <- ConsoleColor.Red
+            printfn "%A: %A" e e.ErrorCode
+            Console.ResetColor ()            
+
+        | e ->
             Console.ForegroundColor <- ConsoleColor.Red
             printfn "%s" e.Message
             Console.ResetColor ()

@@ -38,13 +38,22 @@ let main argv =
                 socket.BeginReceive(data, flags, callback, state)), socket.EndReceive)
 
 //            printfn "RE: %A" (Text.Encoding.ASCII.GetString (data))
-//            do! Async.Sleep 50000
+//            do! Async.Sleep 5000
 //            printfn "."
 
-            socket.Disconnect (true)
-//            socket.Close ()
+            do! Async.FromBeginEnd (true, (fun (reuseSocket, callback, state) ->
+                socket.BeginDisconnect (reuseSocket, callback, state)), socket.EndDisconnect)
 
-        with e ->
+//            socket.Disconnect (true)
+//            socket.Close (0)
+
+        with
+        | :? SocketException as e ->
+            Console.ForegroundColor <- ConsoleColor.Red
+            printfn "%A: %A" e e.ErrorCode
+            Console.ResetColor ()            
+
+        | e ->
             Console.ForegroundColor <- ConsoleColor.Red
             printfn "%s" e.Message
             Console.ResetColor ()
