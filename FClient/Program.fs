@@ -6,15 +6,8 @@ open System.Collections.Generic
 let main argv = 
     printfn "%A" argv
 
-//    Server.start |> Async.Start
-
     let host = "localhost"
     let port = 9000
-
-//    System.Threading.ThreadPool.SetMaxThreads (10240, 10240) |> ignore
-//
-//    let m = System.Threading.ThreadPool.GetMaxThreads ()
-//    printfn "GetMaxThreads: %A" m
 
     let byteIList (data : byte array) =
         let segment = new System.ArraySegment<byte>(data)
@@ -26,8 +19,10 @@ let main argv =
 
         try
             let socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
-            do! Async.FromBeginEnd (host, port, (fun (host, port, callback, state) -> 
+            do! Async.FromBeginEnd (host, port, (fun (host, port, callback, state) ->
                 socket.BeginConnect (host, port, callback, state)), socket.EndConnect)
+
+            printfn "port: %A" socket.LocalEndPoint
 
 //            printfn "Client %A Connected to %A %A..." idx host port
 
@@ -46,12 +41,13 @@ let main argv =
             socket.Close ()
 
         with e ->
-
-            printfn "An error occurred: %s" e.Message
+            Console.ForegroundColor <- ConsoleColor.Red
+            printfn "%s" e.Message
+            Console.ResetColor ()
 
     }
 
-    seq { for i in [0..1020] do yield client i }
+    seq { for i in [1..10000] do yield client i }
     |> Async.Parallel
     |> Async.RunSynchronously
     |> ignore

@@ -14,14 +14,12 @@ let start : Async<unit> =
         data.Add(segment)
         data
 
-    System.Threading.ThreadPool.SetMaxThreads (10240, 10240) |> ignore
-
     let port = 9000
     let endpoint = IPEndPoint (IPAddress.Any, port)
 
     let listener = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
     listener.Bind (endpoint)
-    listener.Listen (10)
+    listener.Listen (16384)
 
     printfn "Listening on port %d" port
 
@@ -62,10 +60,13 @@ let start : Async<unit> =
 //                    return! client ()
 
                 with e ->
-                    printfn "An error occurred: %s" e.Message
+                    Console.ForegroundColor <- ConsoleColor.Red
+                    printfn "%s" e.Message
+                    Console.ResetColor ()
+
 //                    stream.Close ()
                     //socket.Shutdown (SocketShutdown.Both)
-//                    socket.Close ()
+                    socket.Close ()
 
                 
             }
@@ -73,7 +74,9 @@ let start : Async<unit> =
             Async.Start (client ())
 
         with e ->
-            printfn "An error occurred: %s" e.Message
+            Console.ForegroundColor <- ConsoleColor.Red
+            printfn "%s" e.Message
+            Console.ResetColor ()
 
         return! loop (count + 1)
     }
