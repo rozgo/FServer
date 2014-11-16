@@ -41,6 +41,8 @@ let main argv =
 //            do! Async.Sleep 5000
 //            printfn "."
 
+            socket.Shutdown SocketShutdown.Both
+
             do! Async.FromBeginEnd (true, (fun (reuseSocket, callback, state) ->
                 socket.BeginDisconnect (reuseSocket, callback, state)), socket.EndDisconnect)
 

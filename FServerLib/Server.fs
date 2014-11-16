@@ -51,7 +51,7 @@ let start : Async<unit> =
 
 //                    printfn "RE: %A" (Text.Encoding.ASCII.GetString (data))
 
-                    let data = byteIList ("OK"B)
+                    let data = byteIList "OK"B
                     let! sentLength = Async.FromBeginEnd (data, SocketFlags.None, (fun (data, flags, callback, state) ->
                         socket.BeginSend (data, flags, callback, state)), socket.EndSend)
 
@@ -59,6 +59,8 @@ let start : Async<unit> =
 
                     do! Async.Sleep 5000
 //                    socket.Close ()
+
+                    socket.Shutdown SocketShutdown.Both
 
                     do! Async.FromBeginEnd (true, (fun (reuseSocket, callback, state) ->
                         socket.BeginDisconnect (reuseSocket, callback, state)), socket.EndDisconnect)
