@@ -29,7 +29,7 @@ let start : Async<unit> =
 
         try
 
-            use! socket = Async.FromBeginEnd (listener.BeginAccept, listener.EndAccept)
+            let! socket = Async.FromBeginEnd (listener.BeginAccept, listener.EndAccept)
 
 //            let stream = new NetworkStream (socket, false)
 
