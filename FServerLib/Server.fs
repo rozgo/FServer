@@ -55,6 +55,9 @@ let start : Async<unit> =
                     let! sentLength = Async.FromBeginEnd (data, SocketFlags.None, (fun (data, flags, callback, state) ->
                         socket.BeginSend (data, flags, callback, state)), socket.EndSend)
 
+//                    socket.Close ()
+
+                    do! Async.Sleep 3000
                     socket.Close ()
 
 //                    return! client ()
