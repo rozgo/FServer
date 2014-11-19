@@ -7,12 +7,20 @@ Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "FServerLib", "FServerLib\FS
 EndProject
 Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "FClient", "FClient\FClient.fsproj", "{9C970095-AB76-4295-9455-F645D4880648}"
 EndProject
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "FClientLib", "FClientLib\FClientLib.fsproj", "{0880F00B-9B79-4306-B74E-D7136023BC98}"
+EndProject
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "FTest", "FTest\FTest.fsproj", "{B5CAE0CC-3994-4505-BEE7-F67524E8DBA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0880F00B-9B79-4306-B74E-D7136023BC98}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0880F00B-9B79-4306-B74E-D7136023BC98}.Debug|x86.Build.0 = Debug|Any CPU
+		{0880F00B-9B79-4306-B74E-D7136023BC98}.Release|x86.ActiveCfg = Release|Any CPU
+		{0880F00B-9B79-4306-B74E-D7136023BC98}.Release|x86.Build.0 = Release|Any CPU
 		{4D361FC4-2330-4F26-9387-4F30CC80E7EC}.Debug|x86.ActiveCfg = Debug|x86
 		{4D361FC4-2330-4F26-9387-4F30CC80E7EC}.Debug|x86.Build.0 = Debug|x86
 		{4D361FC4-2330-4F26-9387-4F30CC80E7EC}.Release|x86.ActiveCfg = Release|x86
@@ -25,8 +33,12 @@ Global
 		{9C970095-AB76-4295-9455-F645D4880648}.Debug|x86.Build.0 = Debug|x86
 		{9C970095-AB76-4295-9455-F645D4880648}.Release|x86.ActiveCfg = Release|x86
 		{9C970095-AB76-4295-9455-F645D4880648}.Release|x86.Build.0 = Release|x86
+		{B5CAE0CC-3994-4505-BEE7-F67524E8DBA1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B5CAE0CC-3994-4505-BEE7-F67524E8DBA1}.Debug|x86.Build.0 = Debug|Any CPU
+		{B5CAE0CC-3994-4505-BEE7-F67524E8DBA1}.Release|x86.ActiveCfg = Release|Any CPU
+		{B5CAE0CC-3994-4505-BEE7-F67524E8DBA1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = FServer\FServer.fsproj
+		StartupItem = FTest\FTest.fsproj
 	EndGlobalSection
 EndGlobal

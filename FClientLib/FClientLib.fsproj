@@ -2,31 +2,33 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{9C970095-AB76-4295-9455-F645D4880648}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>FClient</RootNamespace>
-    <AssemblyName>FClient</AssemblyName>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0880F00B-9B79-4306-B74E-D7136023BC98}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>FClientLib</RootNamespace>
+    <AssemblyName>FClientLib</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
     <Tailcalls>false</Tailcalls>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>
+    </PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
-    <PlatformTarget>x86</PlatformTarget>
-    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>
+    </PlatformTarget>
+    <ConsolePause>false</ConsolePause>
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
   <ItemGroup>
@@ -38,13 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Client.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\FClientLib\FClientLib.fsproj">
-      <Project>{0880F00B-9B79-4306-B74E-D7136023BC98}</Project>
-      <Name>FClientLib</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

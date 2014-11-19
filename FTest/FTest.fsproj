@@ -2,31 +2,34 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{9C970095-AB76-4295-9455-F645D4880648}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>FClient</RootNamespace>
-    <AssemblyName>FClient</AssemblyName>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B5CAE0CC-3994-4505-BEE7-F67524E8DBA1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>FTest</RootNamespace>
+    <AssemblyName>FTest</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
     <Tailcalls>false</Tailcalls>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>
+    </PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
-    <PlatformTarget>x86</PlatformTarget>
-    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>
+    </PlatformTarget>
+    <ConsolePause>false</ConsolePause>
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
   <ItemGroup>
@@ -34,17 +37,23 @@
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
+    <Reference Include="nunit.framework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Test.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
+    <ProjectReference Include="..\FServerLib\FServerLib.fsproj">
+      <Project>{8C1353BB-0580-4665-9FD2-697DF0A053EC}</Project>
+      <Name>FServerLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FClientLib\FClientLib.fsproj">
       <Project>{0880F00B-9B79-4306-B74E-D7136023BC98}</Project>
       <Name>FClientLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Test.fsx" />
   </ItemGroup>
 </Project>

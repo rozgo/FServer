@@ -19,7 +19,7 @@ let start : Async<unit> =
 
     let listener = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
     listener.Bind (endpoint)
-    listener.Listen (16384)
+    listener.Listen (14000)
 
     printfn "Listening on port %d" port
 
@@ -33,7 +33,7 @@ let start : Async<unit> =
 
 //            let stream = new NetworkStream (socket, false)
 
-
+            printfn "server accepted: %A -> %A" socket.LocalEndPoint socket.RemoteEndPoint
 
             let rec client () = async {
 
@@ -49,21 +49,25 @@ let start : Async<unit> =
                     let! dataLength = Async.FromBeginEnd(byteIList data, SocketFlags.None, (fun (data, flags, callback, state) ->
                         socket.BeginReceive(data, flags, callback, state)), socket.EndReceive)
 
-//                    printfn "RE: %A" (Text.Encoding.ASCII.GetString (data))
+                    printfn "client said: %A" (Text.Encoding.ASCII.GetString (data))
 
-                    let data = byteIList "OK"B
+                    let data = byteIList "me too, this is fabulous"B
                     let! sentLength = Async.FromBeginEnd (data, SocketFlags.None, (fun (data, flags, callback, state) ->
                         socket.BeginSend (data, flags, callback, state)), socket.EndSend)
 
 //                    socket.Close ()
 
-                    do! Async.Sleep 5000
+//                    do! Async.Sleep 10000
 //                    socket.Close ()
 
-                    socket.Shutdown SocketShutdown.Both
+//                    socket.Shutdown SocketShutdown.Both
+
+                    printfn "server is disconnecting from remote: %A" socket.RemoteEndPoint
 
                     do! Async.FromBeginEnd (true, (fun (reuseSocket, callback, state) ->
                         socket.BeginDisconnect (reuseSocket, callback, state)), socket.EndDisconnect)
+
+                    printfn "server disconnected from remote: %A" socket.RemoteEndPoint
 
                     socket.Close (0)
 
