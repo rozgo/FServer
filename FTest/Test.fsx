@@ -1,8 +1,10 @@
 ﻿open System
 open System.Threading
 
+#r @"./bin/Debug/Filbert.dll"
 #r @"./bin/Debug/FServerLib.dll"
 #r @"./bin/Debug/FClientLib.dll"
+
 
 open FServerLib
 open FClientLib
@@ -15,7 +17,7 @@ let cts = new CancellationTokenSource ()
 
 let task = Async.StartAsTask (Server.start, cancellationToken = cts.Token)
 
-seq { for i in [1..10000] do yield Client.start }
+seq { for i in [1..1] do yield Client.start }
 //Client.start
 |> Async.Parallel
 |> Async.RunSynchronously

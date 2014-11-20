@@ -6,20 +6,18 @@ open System.Net
 open System.Net.Sockets
 open System.Collections.Generic
 
-let start : Async<unit> =
+open Filbert.Core
+open Filbert.Encoder
+open Filbert.Decoder
 
-    let byteIList (data : byte array) =
-        let segment = new System.ArraySegment<byte>(data)
-        let data = new List<System.ArraySegment<byte>>() :> IList<System.ArraySegment<byte>>
-        data.Add(segment)
-        data
+let start : Async<unit> =
 
     let port = 9000
     let endpoint = IPEndPoint (IPAddress.Any, port)
 
     let listener = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
     listener.Bind (endpoint)
-    listener.Listen (14000)
+    listener.Listen (10)
 
     printfn "Listening on port %d" port
 
@@ -31,36 +29,23 @@ let start : Async<unit> =
 
             let! socket = Async.FromBeginEnd (listener.BeginAccept, listener.EndAccept)
 
-//            let stream = new NetworkStream (socket, false)
+            let stream = new NetworkStream (socket, false)
 
             printfn "server accepted: %A -> %A" socket.LocalEndPoint socket.RemoteEndPoint
 
             let rec client () = async {
 
-    //            let! response = stream.AsyncRead (14)
-    //            printfn "RE: %A" (Text.Encoding.ASCII.GetString (response))
-    //            do! stream.AsyncWrite (response)
-
-//                printfn "Waiting on client"
-
                 try
 
-                    let data = Array.zeroCreate<byte> 256
-                    let! dataLength = Async.FromBeginEnd(byteIList data, SocketFlags.None, (fun (data, flags, callback, state) ->
-                        socket.BeginReceive(data, flags, callback, state)), socket.EndReceive)
+                    let bert = decode stream
 
-                    printfn "client said: %A" (Text.Encoding.ASCII.GetString (data))
+                    printfn "client said: %A" bert
 
-                    let data = byteIList "me too, this is fabulous"B
-                    let! sentLength = Async.FromBeginEnd (data, SocketFlags.None, (fun (data, flags, callback, state) ->
-                        socket.BeginSend (data, flags, callback, state)), socket.EndSend)
+                    let bert = Atom "ok" 
 
-//                    socket.Close ()
-
-//                    do! Async.Sleep 10000
-//                    socket.Close ()
-
-//                    socket.Shutdown SocketShutdown.Both
+                    use ms = new MemoryStream ()
+                    encode bert ms
+                    do! stream.AsyncWrite (ms.ToArray ())
 
                     printfn "server is disconnecting from remote: %A" socket.RemoteEndPoint
 
@@ -70,10 +55,6 @@ let start : Async<unit> =
                     printfn "server disconnected from remote: %A" socket.RemoteEndPoint
 
                     socket.Close (0)
-
-//                    do! Async.Sleep 5000
-
-//                    return! client ()
 
                 with
                 | :? SocketException as e ->
@@ -86,13 +67,11 @@ let start : Async<unit> =
                     printfn "%s" e.Message
                     Console.ResetColor ()
 
-//                    stream.Close ()
-                    //socket.Shutdown (SocketShutdown.Both)
                     socket.Close ()
 
                 
             }
-//            do! client ()
+
             Async.Start (client ())
 
         with

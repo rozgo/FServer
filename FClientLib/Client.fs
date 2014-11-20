@@ -6,44 +6,37 @@ open System.Net
 open System.Net.Sockets
 open System.Collections.Generic
 
+open Filbert.Core
+open Filbert.Encoder
+open Filbert.Decoder
+
 let host = "localhost"
 let port = 9000
-
-let byteIList (data : byte array) =
-    let segment = new System.ArraySegment<byte>(data)
-    let data = new List<System.ArraySegment<byte>>() :> IList<System.ArraySegment<byte>>
-    data.Add(segment)
-    data
 
 let start = async {
 
     try
-        let socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
 
-//        do! Async.Sleep 5000
+        let socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
 
 //            socket.SetSocketOption (SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true)
 
         do! Async.FromBeginEnd (host, port, (fun (host, port, callback, state) ->
             socket.BeginConnect (host, port, callback, state)), socket.EndConnect)
 
+        let stream = new NetworkStream (socket, false)
+
         printfn "client connected: %A -> %A" socket.LocalEndPoint socket.RemoteEndPoint
 
-//            printfn "Client %A Connected to %A %A..." idx host port
+        let mysterWord = [| 131uy; 107uy; 0uy; 8uy; 104uy; 97uy; 122uy; 101uy; 108uy; 110uy; 117uy; 116uy |]
+        let bert = Dictionary (Map.ofList [(Atom "Filbert", Atom "means"); (ByteList mysterWord, Atom "!")])
 
-        let data = byteIList ("I'm so happy!!!"B)
-        let! sentLength = Async.FromBeginEnd (data, SocketFlags.None, (fun (data, flags, callback, state) ->
-            socket.BeginSend (data, flags, callback, state)), socket.EndSend)
+        use ms = new MemoryStream ()
+        encode bert ms
+        do! stream.AsyncWrite (ms.ToArray ())
 
-        let data = Array.zeroCreate<byte> 256
-        let! dataLength = Async.FromBeginEnd(byteIList data, SocketFlags.None, (fun (data, flags, callback, state) ->
-            socket.BeginReceive(data, flags, callback, state)), socket.EndReceive)
-
-        printfn "server said: %A" (Text.Encoding.ASCII.GetString (data))
-//            do! Async.Sleep 5000
-//            printfn "."
-
-//        socket.Shutdown SocketShutdown.Both
+        let bert = decode stream
+        printfn "server said: %A" bert
 
         printfn "client disconnecting: %A" socket.LocalEndPoint
 
@@ -51,11 +44,6 @@ let start = async {
             socket.BeginDisconnect (reuseSocket, callback, state)), socket.EndDisconnect)
 
         socket.Close (0)
-
-//        do! Async.Sleep 5000
-
-//            socket.Disconnect (true)
-//            socket.Close (0)
 
     with
     | :? SocketException as e ->
